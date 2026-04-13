@@ -1,0 +1,8 @@
+CREATE DATABASE IF NOT EXISTS devops_app;
+
+USE devops_app;
+
+CREATE TABLE IF NOT EXISTS messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    message TEXT
+);

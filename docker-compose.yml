@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  flaskapp:
+    build: .
+    container_name: flask_app
+    ports:
+      - "8081:5000"
+    environment:
+      DB_HOST: mysql_db
+      DB_USER: root
+      DB_NAME: devops_app
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    depends_on:
+      - mysql_db
+    secrets:
+      - db_password
+    restart: always
+
+  mysql_db:
+    image: mysql:8
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_DATABASE: devops_app
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    secrets:
+      - db_password
+
+secrets:
+  db_password:
+    file: ./db_password
+
+volumes:
+  mysql_data:
+
